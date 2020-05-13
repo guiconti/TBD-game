@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 public class CharacterController2D : MonoBehaviour {
   [SerializeField] private float _jumpForce = 400f; // Amount of force added when the player jumps.
   [Range (0, 1)][SerializeField] private float _crouchSpeed = .36f; // Amount of maxSpeed applied to crouching movement. 1 = 100%
@@ -20,6 +21,8 @@ public class CharacterController2D : MonoBehaviour {
   private bool _isFacingRight = true; // For determining which way the player is currently facing.
   private Vector3 _velocity = Vector3.zero;
 
+  Animator animator;
+
   [Header ("Events")]
   [Space]
 
@@ -32,7 +35,8 @@ public class CharacterController2D : MonoBehaviour {
   private bool _wasCrouching = false;
 
   private void Awake () {
-    rb = GetComponent<Rigidbody2D> ();
+    rb = this.GetComponent<Rigidbody2D> ();
+    animator = this.GetComponent<Animator>();
 
     if (OnLandEvent == null)
       OnLandEvent = new UnityEvent ();
@@ -110,6 +114,7 @@ public class CharacterController2D : MonoBehaviour {
         // ... flip the player.
         Flip ();
       }
+      animator.SetFloat("Speed", Mathf.Abs(move));
     }
     // If the player should jump...
     if (_isGrounded && jump) {
