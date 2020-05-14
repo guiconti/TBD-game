@@ -38,9 +38,6 @@ public class CharacterController2D : MonoBehaviour {
     rb = this.GetComponent<Rigidbody2D> ();
     animator = this.GetComponent<Animator>();
 
-    if (OnLandEvent == null)
-      OnLandEvent = new UnityEvent ();
-
     if (OnCrouchEvent == null)
       OnCrouchEvent = new BoolEvent ();
   }
@@ -57,6 +54,9 @@ public class CharacterController2D : MonoBehaviour {
         _isGrounded = true;
         if (!wasGrounded) {
           OnLandEvent.Invoke ();
+          //  This should be in one of the functions called be the OnLandEvent
+          //  But for now, since this is the only thing after landing, I will keep it here
+          animator.SetBool("Jump", false);
         }
       }
     }
@@ -120,6 +120,7 @@ public class CharacterController2D : MonoBehaviour {
     if (_isGrounded && jump) {
       // Add a vertical force to the player.
       _isGrounded = false;
+      animator.SetBool("Jump", true);
       rb.AddForce(new Vector2 (0f, _jumpForce));
     }
   }
