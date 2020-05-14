@@ -5,10 +5,11 @@ using UnityEngine.Events;
 [RequireComponent (typeof (Animator))]
 public class CharacterController2D : MonoBehaviour {
   [SerializeField] private float _jumpForce = 400f; // Amount of force added when the player jumps.
+  [SerializeField] private float _wallJumpForce = 100f; // Amount of force added when the player jumps form the wall.
   [Range (0, 1)][SerializeField] private float _crouchSpeed = .36f; // Amount of maxSpeed applied to crouching movement. 1 = 100%
   [Range (0, .3f)][SerializeField] private float _movementSmoothing = .05f; // How much to smooth out the movement
   [Range (0, 1)][SerializeField] private float _airborneSmoothing = .75f; //  How much to smooth out the airborne movement. 1 = 100%
-  [Range (0, 1)][SerializeField] private float _slidingVelocity = -1f; //  Slide velocity
+  [Range (0, 1)][SerializeField] private float _wallSlidingVelocity = -1f; //  Slide velocity
   [SerializeField] private bool _airControl = true; // Whether or not a player can steer while jumping;
   [SerializeField] private LayerMask _groundLayer; // A mask determining what is ground to the character
   [SerializeField] private Transform _groundCheck; // A position marking where to check if the player is grounded.
@@ -20,7 +21,8 @@ public class CharacterController2D : MonoBehaviour {
   const float groundedRadius = .2f; // Radius of the overlap circle to determine if grounded
   private bool _isGrounded; // Whether or not the player is grounded.
   const float ceilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
-  private bool _isSliding;
+  private bool _isLeftWallSliding;
+  private bool _isRightWallSliding;
   const float sideRadius = .02f;
   private Rigidbody2D rb;
   private bool _isFacingRight = true; // For determining which way the player is currently facing.
@@ -137,21 +139,28 @@ public class CharacterController2D : MonoBehaviour {
 
   private void Jump (bool jump) {
     // If the player should jump...
-    if (_isGrounded && jump) {
+    if (jump) {
       // Add a vertical force to the player.
-      _isGrounded = false;
-      animator.SetBool ("Jump", true);
-      rb.AddForce (new Vector2 (0f, _jumpForce));
+      if (_isGrounded) {
+        _isGrounded = false;
+        animator.SetBool ("Jump", true);
+        rb.AddForce (new Vector2 (0f, _jumpForce));
+      } else if (_isLeftWallSliding || _isRightWallSliding) {
+        animator.SetBool ("Jump", true);
+        rb.AddForce (new Vector2 (_wallJumpForce * (_isLeftWallSliding ? -1 : 1), _jumpForce));
+      }
     }
   }
 
   private void Slide () {
-    _isSliding = false;
+    _isLeftWallSliding = _isRightWallSliding = false;
     if (!_isGrounded && rb.velocity.y < 0) {
-      _isSliding = Physics2D.OverlapCircle (_leftSideCheck.position, sideRadius, _groundLayer)
-        || Physics2D.OverlapCircle (_rightSideCheck.position, sideRadius, _groundLayer);
-      if (_isSliding) {
-        rb.velocity = new Vector2(rb.velocity.x, -1f);
+      _isLeftWallSliding = Physics2D.OverlapCircle (_leftSideCheck.position, sideRadius, _groundLayer);
+      if (!_isLeftWallSliding) {
+        _isRightWallSliding = Physics2D.OverlapCircle (_rightSideCheck.position, sideRadius, _groundLayer);
+      }
+      if (_isLeftWallSliding || _isRightWallSliding) {
+        rb.velocity = new Vector2 (rb.velocity.x, _wallSlidingVelocity);
       }
     }
   }

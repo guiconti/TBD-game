@@ -2742,10 +2742,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpForce: 550
+  _wallJumpForce: 600
   _crouchSpeed: 0.36
   _movementSmoothing: 0.05
   _airborneSmoothing: 0.1
-  _slidingVelocity: -1
+  _wallSlidingVelocity: -1
   _airControl: 1
   _groundLayer:
     serializedVersion: 2
