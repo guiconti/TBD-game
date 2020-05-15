@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
   private CharacterController2D _controller;
   private float _inputX;
   private bool _jump;
+  private bool _crouch;
 
   public int movementSpeed = 50;
 
@@ -20,7 +21,7 @@ public class PlayerMovement : MonoBehaviour {
   }
 
   void FixedUpdate() {
-    _controller.Move(_inputX * Time.fixedDeltaTime, false, _jump);
+    _controller.Move(_inputX * Time.fixedDeltaTime, _crouch, _jump);
     _jump = false;
   }
 
@@ -28,6 +29,11 @@ public class PlayerMovement : MonoBehaviour {
     _inputX = Input.GetAxisRaw("Horizontal") * movementSpeed;
     if (Input.GetButtonDown("Jump")) {
       _jump = true;
+    }
+    if (Input.GetButtonDown("Crouch")) {
+      _crouch = true;
+    } else if (Input.GetButtonUp("Crouch")) {
+      _crouch = false;
     }
   }
 }

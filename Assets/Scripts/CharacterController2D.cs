@@ -84,6 +84,8 @@ public class CharacterController2D : MonoBehaviour {
         if (!_wasCrouching) {
           _wasCrouching = true;
           OnCrouchEvent.Invoke (true);
+          //  Should use the event
+          animator.SetBool("Crouching", true);
         }
 
         // Reduce the speed by the crouchSpeed multiplier
@@ -93,13 +95,17 @@ public class CharacterController2D : MonoBehaviour {
         if (_crouchDisableCollider != null)
           _crouchDisableCollider.enabled = false;
       } else {
+
         // Enable the collider when not crouching
         if (_crouchDisableCollider != null)
           _crouchDisableCollider.enabled = true;
 
         if (_wasCrouching) {
+          Debug.Log("Nandeska");
           _wasCrouching = false;
           OnCrouchEvent.Invoke (false);
+          //  Should use the event
+          animator.SetBool("Crouching", false);
         }
       }
 
