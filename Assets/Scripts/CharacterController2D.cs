@@ -14,15 +14,13 @@ public class CharacterController2D : MonoBehaviour {
   [SerializeField] private LayerMask _groundLayer; // A mask determining what is ground to the character
   [SerializeField] private Transform _groundCheck; // A position marking where to check if the player is grounded.
   [SerializeField] private Transform _ceilingCheck; // A position marking where to check for ceilings
-  [SerializeField] private Transform _leftSideCheck; // A position marking where to check for left side collisions
-  [SerializeField] private Transform _rightSideCheck; // A position marking where to check for right side collisions
+  [SerializeField] private Transform _sideCheck; // A position marking where to check for right side collisions
   [SerializeField] private Collider2D _crouchDisableCollider; // A collider that will be disabled when crouching
 
   const float groundedRadius = .05f; // Radius of the overlap circle to determine if grounded
   private bool _isGrounded; // Whether or not the player is grounded.
   const float ceilingRadius = .05f; // Radius of the overlap circle to determine if the player can stand up
-  private bool _isLeftWallSliding;
-  private bool _isRightWallSliding;
+  private bool _isWallSliding;
   const float sideRadius = .02f;
   private Rigidbody2D rb;
   private bool _isFacingRight = true; // For determining which way the player is currently facing.
@@ -145,23 +143,21 @@ public class CharacterController2D : MonoBehaviour {
         _isGrounded = false;
         animator.SetBool ("Jump", true);
         rb.AddForce (new Vector2 (0f, _jumpForce));
-      } else if (_isLeftWallSliding || _isRightWallSliding) {
+      } else if (_isWallSliding) {
         animator.SetBool ("Jump", true);
-        rb.AddForce (new Vector2 (_wallJumpForce * (_isLeftWallSliding ? -1 : 1), _jumpForce));
+        rb.AddForce (new Vector2 (_wallJumpForce * (_isFacingRight ? -1 : 1), _jumpForce));
       }
     }
   }
 
   private void Slide () {
-    _isLeftWallSliding = _isRightWallSliding = false;
+    _isWallSliding = false;
     if (!_isGrounded && rb.velocity.y < 0) {
-      _isLeftWallSliding = Physics2D.OverlapCircle (_leftSideCheck.position, sideRadius, _groundLayer);
-      if (!_isLeftWallSliding) {
-        _isRightWallSliding = Physics2D.OverlapCircle (_rightSideCheck.position, sideRadius, _groundLayer);
-      }
-      if (_isLeftWallSliding || _isRightWallSliding) {
+      _isWallSliding = Physics2D.OverlapCircle (_sideCheck.position, sideRadius, _groundLayer);
+      if (_isWallSliding) {
         rb.velocity = new Vector2 (rb.velocity.x, _wallSlidingVelocity);
       }
     }
+    animator.SetBool ("WallSliding", _isWallSliding);
   }
 }
