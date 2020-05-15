@@ -18,9 +18,9 @@ public class CharacterController2D : MonoBehaviour {
   [SerializeField] private Transform _rightSideCheck; // A position marking where to check for right side collisions
   [SerializeField] private Collider2D _crouchDisableCollider; // A collider that will be disabled when crouching
 
-  const float groundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+  const float groundedRadius = .05f; // Radius of the overlap circle to determine if grounded
   private bool _isGrounded; // Whether or not the player is grounded.
-  const float ceilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
+  const float ceilingRadius = .05f; // Radius of the overlap circle to determine if the player can stand up
   private bool _isLeftWallSliding;
   private bool _isRightWallSliding;
   const float sideRadius = .02f;

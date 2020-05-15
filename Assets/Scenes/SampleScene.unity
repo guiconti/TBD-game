@@ -394,7 +394,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616725945}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -0.339, z: 0}
+  m_LocalPosition: {x: -0.012, y: -0.339, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1290979882}
@@ -2742,7 +2742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpForce: 550
-  _wallJumpForce: 800
+  _wallJumpForce: 400
   _crouchSpeed: 0.36
   _movementSmoothing: 0.05
   _airborneSmoothing: 0.1
