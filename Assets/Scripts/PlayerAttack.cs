@@ -8,6 +8,8 @@ public class PlayerAttack : MonoBehaviour {
   private bool _canSlash = true;
   [SerializeField] private Transform _slashPosition;
   [SerializeField] private GameObject _slashObject;
+  [SerializeField] private Transform _shootPosition;
+  [SerializeField] private GameObject _shootObject;
   private Animator animator;
   private CharacterController2D controller;
   // Start is called before the first frame update
@@ -22,18 +24,30 @@ public class PlayerAttack : MonoBehaviour {
   }
 
   private void ReadInput() {
-    if (Input.GetButtonDown("Slash") && !controller.IsWallSliding() && !controller.IsCrouching()) {
-      Slash();
+    if (!controller.IsWallSliding() && !controller.IsCrouching()) {
+      if (Input.GetButtonDown("Slash")) {
+        Slash();
+      } else if (Input.GetButtonDown("Shoot")) {
+        Shoot();
+      }
     }
+  }
+
+  private GameObject InstantiateAttack(GameObject gameObject, Vector3 position) {
+    GameObject attackInstatiation = GameObject.Instantiate(gameObject, position, Quaternion.identity);
+    if (!controller.IsFacingRight()) {
+      attackInstatiation.GetComponent<Attack>().ReverseDirection();
+    }
+    return attackInstatiation;
   }
 
   private void Slash() {
     animator.SetTrigger("Slash");
-    GameObject slashInstatiation = GameObject.Instantiate(_slashObject, _slashPosition.position, Quaternion.identity);
-    if (!controller.IsFacingRight()) {
-      Vector3 theScale = slashInstatiation.transform.localScale;
-      theScale.x *= -1;
-      slashInstatiation.transform.localScale = theScale;
-    }
+    InstantiateAttack(_slashObject, _slashPosition.position);
+  }
+
+  private void Shoot() {
+    animator.SetTrigger("Shoot");
+    InstantiateAttack(_shootObject, _shootPosition.position);
   }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slash : Attack {
+public class Slash : MeleeAttack {
   // Start is called before the first frame update
   void Start () {
 

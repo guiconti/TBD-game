@@ -43,22 +43,20 @@ public class CharacterController2D : MonoBehaviour {
   private void Awake () {
     rb = this.GetComponent<Rigidbody2D> ();
     animator = this.GetComponent<Animator> ();
-
-    if (OnCrouchEvent == null)
+    if (OnCrouchEvent == null) {
       OnCrouchEvent = new BoolEvent ();
+    }
   }
 
   private void FixedUpdate () {
     bool wasGrounded = _isGrounded;
     _isGrounded = false;
 
-    // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-    // This can be done using layers instead but Sample Assets will not overwrite your project settings.
     Collider2D[] colliders = Physics2D.OverlapCircleAll (_groundCheck.position, groundedRadius, _groundLayer);
     for (int i = 0; i < colliders.Length; i++) {
       if (colliders[i].gameObject != gameObject) {
         _isGrounded = true;
-        if (!wasGrounded) {
+        if (!wasGrounded && rb.velocity.y < 0) {
           OnLandEvent.Invoke ();
           //  This should be in one of the functions called be the OnLandEvent
           //  But for now, since this is the only thing after landing, I will keep it here
@@ -71,7 +69,7 @@ public class CharacterController2D : MonoBehaviour {
 
   public void Move (float move, bool crouch, bool jump) {
     // If crouching, check to see if the character can stand up
-    if (!crouch) {
+    if (!crouch && _wasCrouching) {
       // If the character has a ceiling preventing them from standing up, keep them crouching
       if (Physics2D.OverlapCircle (_ceilingCheck.position, ceilingRadius, _groundLayer)) {
         crouch = true;
@@ -80,7 +78,6 @@ public class CharacterController2D : MonoBehaviour {
 
     //only control the player if grounded or airControl is turned on
     if (_isGrounded || _airControl) {
-      // If crouching
       if (crouch) {
         if (!_wasCrouching) {
           _wasCrouching = true;
@@ -88,19 +85,14 @@ public class CharacterController2D : MonoBehaviour {
           //  Should use the event
           animator.SetBool("Crouching", true);
         }
-
-        // Reduce the speed by the crouchSpeed multiplier
         move *= _crouchSpeed;
-
-        // Disable one of the colliders when crouching
-        if (_crouchDisableCollider != null)
+        if (_crouchDisableCollider != null) {
           _crouchDisableCollider.enabled = false;
+        }
       } else {
-
-        // Enable the collider when not crouching
-        if (_crouchDisableCollider != null)
+        if (_crouchDisableCollider != null) {
           _crouchDisableCollider.enabled = true;
-
+        }
         if (_wasCrouching) {
           _wasCrouching = false;
           OnCrouchEvent.Invoke (false);
@@ -115,14 +107,10 @@ public class CharacterController2D : MonoBehaviour {
       float smoothness = _isGrounded ? _movementSmoothing : _airborneSmoothing;
       rb.velocity = Vector3.SmoothDamp (rb.velocity, targetVelocity, ref _velocity, smoothness);
 
-      // If the input is moving the player right and the player is facing left...
       if (move > 0 && !_isFacingRight) {
-        // ... flip the player.
         Flip ();
       }
-      // Otherwise if the input is moving the player left and the player is facing right...
       else if (move < 0 && _isFacingRight) {
-        // ... flip the player.
         Flip ();
       }
       animator.SetFloat ("Speed", Mathf.Abs (move));
@@ -142,9 +130,7 @@ public class CharacterController2D : MonoBehaviour {
   }
 
   private void Jump (bool jump) {
-    // If the player should jump...
     if (jump) {
-      // Add a vertical force to the player.
       if (_isGrounded) {
         _isGrounded = false;
         animator.SetBool ("Jump", true);

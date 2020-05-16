@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &35167323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 35167324}
+  m_Layer: 0
+  m_Name: ShootPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &35167324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35167323}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.328, y: -0.058, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2565040288591304480}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2565040287080245401
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2565040287118024883}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.012, y: -0.339, z: 0}
+  m_LocalPosition: {x: -0.012, y: -0.275, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2565040288591304480}
@@ -129,6 +159,7 @@ Transform:
   - {fileID: 2565040288465112797}
   - {fileID: 2565040287080245406}
   - {fileID: 70643078356370865}
+  - {fileID: 35167324}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -324,6 +355,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slashPosition: {fileID: 70643078356370865}
   _slashObject: {fileID: 2830161751321869645, guid: 3cf385ba05468446993efa04456b5260, type: 3}
+  _shootPosition: {fileID: 35167324}
+  _shootObject: {fileID: 2826203343045336327, guid: 4d559c699e9934c7089731efad72e118, type: 3}
 --- !u!1 &2989464377808660475
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,7 +367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 70643078356370865}
   m_Layer: 0
-  m_Name: Slash Position
+  m_Name: SlashPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -348,7 +381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2989464377808660475}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.444, y: -0.068, z: 0}
+  m_LocalPosition: {x: 0.59, y: -0.068, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2565040288591304480}
