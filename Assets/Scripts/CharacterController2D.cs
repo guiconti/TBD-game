@@ -23,7 +23,8 @@ public class CharacterController2D : MonoBehaviour {
   private bool _isWallSliding;
   const float sideRadius = .02f;
   private Rigidbody2D rb;
-  private bool _isFacingRight = true; // For determining which way the player is currently facing.
+  [HideInInspector]
+  public bool isFacingRight = true; // For determining which way the player is currently facing.
   private Vector3 _velocity = Vector3.zero;
 
   Animator animator;
@@ -116,12 +117,12 @@ public class CharacterController2D : MonoBehaviour {
       rb.velocity = Vector3.SmoothDamp (rb.velocity, targetVelocity, ref _velocity, smoothness);
 
       // If the input is moving the player right and the player is facing left...
-      if (move > 0 && !_isFacingRight) {
+      if (move > 0 && !isFacingRight) {
         // ... flip the player.
         Flip ();
       }
       // Otherwise if the input is moving the player left and the player is facing right...
-      else if (move < 0 && _isFacingRight) {
+      else if (move < 0 && isFacingRight) {
         // ... flip the player.
         Flip ();
       }
@@ -133,7 +134,7 @@ public class CharacterController2D : MonoBehaviour {
 
   private void Flip () {
     // Switch the way the player is labelled as facing.
-    _isFacingRight = !_isFacingRight;
+    isFacingRight = !isFacingRight;
 
     // Multiply the player's x local scale by -1.
     Vector3 theScale = transform.localScale;
@@ -151,7 +152,7 @@ public class CharacterController2D : MonoBehaviour {
         rb.AddForce (new Vector2 (0f, _jumpForce));
       } else if (_isWallSliding) {
         animator.SetBool ("Jump", true);
-        rb.AddForce (new Vector2 (_wallJumpForce * (_isFacingRight ? -1 : 1), _jumpForce));
+        rb.AddForce (new Vector2 (_wallJumpForce * (isFacingRight ? -1 : 1), _jumpForce));
       }
     }
   }
