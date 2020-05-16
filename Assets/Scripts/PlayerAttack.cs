@@ -22,23 +22,18 @@ public class PlayerAttack : MonoBehaviour {
   }
 
   private void ReadInput() {
-    if (Input.GetButtonDown("Slash")) {
+    if (Input.GetButtonDown("Slash") && !controller.IsWallSliding() && !controller.IsCrouching()) {
       Slash();
     }
   }
 
   private void Slash() {
     animator.SetTrigger("Slash");
-    _canSlash = false;
     GameObject slashInstatiation = GameObject.Instantiate(_slashObject, _slashPosition.position, Quaternion.identity);
-    if (!controller.isFacingRight) {
+    if (!controller.IsFacingRight()) {
       Vector3 theScale = slashInstatiation.transform.localScale;
       theScale.x *= -1;
       slashInstatiation.transform.localScale = theScale;
     }
-  }
-
-  void ResetSlash() {
-    _canSlash = true;
   }
 }

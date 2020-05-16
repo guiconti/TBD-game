@@ -24,7 +24,7 @@ public class CharacterController2D : MonoBehaviour {
   const float sideRadius = .02f;
   private Rigidbody2D rb;
   [HideInInspector]
-  public bool isFacingRight = true; // For determining which way the player is currently facing.
+  private bool _isFacingRight = true; // For determining which way the player is currently facing.
   private Vector3 _velocity = Vector3.zero;
 
   Animator animator;
@@ -102,7 +102,6 @@ public class CharacterController2D : MonoBehaviour {
           _crouchDisableCollider.enabled = true;
 
         if (_wasCrouching) {
-          Debug.Log("Nandeska");
           _wasCrouching = false;
           OnCrouchEvent.Invoke (false);
           //  Should use the event
@@ -117,12 +116,12 @@ public class CharacterController2D : MonoBehaviour {
       rb.velocity = Vector3.SmoothDamp (rb.velocity, targetVelocity, ref _velocity, smoothness);
 
       // If the input is moving the player right and the player is facing left...
-      if (move > 0 && !isFacingRight) {
+      if (move > 0 && !_isFacingRight) {
         // ... flip the player.
         Flip ();
       }
       // Otherwise if the input is moving the player left and the player is facing right...
-      else if (move < 0 && isFacingRight) {
+      else if (move < 0 && _isFacingRight) {
         // ... flip the player.
         Flip ();
       }
@@ -134,7 +133,7 @@ public class CharacterController2D : MonoBehaviour {
 
   private void Flip () {
     // Switch the way the player is labelled as facing.
-    isFacingRight = !isFacingRight;
+    _isFacingRight = !_isFacingRight;
 
     // Multiply the player's x local scale by -1.
     Vector3 theScale = transform.localScale;
@@ -152,7 +151,7 @@ public class CharacterController2D : MonoBehaviour {
         rb.AddForce (new Vector2 (0f, _jumpForce));
       } else if (_isWallSliding) {
         animator.SetBool ("Jump", true);
-        rb.AddForce (new Vector2 (_wallJumpForce * (isFacingRight ? -1 : 1), _jumpForce));
+        rb.AddForce (new Vector2 (_wallJumpForce * (_isFacingRight ? -1 : 1), _jumpForce));
       }
     }
   }
@@ -166,5 +165,18 @@ public class CharacterController2D : MonoBehaviour {
       }
     }
     animator.SetBool ("WallSliding", _isWallSliding);
+  }
+
+  //  Public Getters
+  public bool IsFacingRight() {
+    return _isFacingRight;
+  }
+
+  public bool IsWallSliding() {
+    return _isWallSliding;
+  }
+
+  public bool IsCrouching() {
+    return _wasCrouching;
   }
 }
