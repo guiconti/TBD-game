@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour {
   [SerializeField] private Transform _shootPosition;
   [SerializeField] private GameObject _energyBallObject;
   [SerializeField] private GameObject _freezeBallObject;
-  private int _freezeBallMax = 2;
+  private int _freezeBallMax = 20;
   private Animator animator;
   private CharacterController2D controller;
   private List<FreezeBall> _freezeBalls = new List<FreezeBall>();
@@ -58,7 +58,6 @@ public class PlayerAttack : MonoBehaviour {
     animator.SetTrigger("FreezeBall");
     GameObject freezeBallGameObject = InstantiateAttack(_freezeBallObject, _shootPosition.position);
     if (_freezeBalls.Count >= _freezeBallMax) {
-      _freezeBalls[0].Destroy();
       _freezeBalls.RemoveAt(0);
     }
     _freezeBalls.Add(freezeBallGameObject.GetComponent<FreezeBall>());
