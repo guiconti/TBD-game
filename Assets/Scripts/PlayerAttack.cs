@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -9,16 +8,18 @@ public class PlayerAttack : MonoBehaviour {
   [SerializeField] private Transform _slashPosition;
   [SerializeField] private GameObject _slashObject;
   [SerializeField] private Transform _shootPosition;
-  [SerializeField] private GameObject _shootObject;
+  [SerializeField] private GameObject _energyBallObject;
+  [SerializeField] private GameObject _freezeBallObject;
+  private int _freezeBallMax = 2;
   private Animator animator;
   private CharacterController2D controller;
-  // Start is called before the first frame update
+  private List<FreezeBall> _freezeBalls = new List<FreezeBall>();
+
   void Start () {
     animator = this.GetComponent<Animator>();
     controller = this.GetComponent<CharacterController2D>();
   }
 
-  // Update is called once per frame
   void Update () {
     ReadInput();
   }
@@ -28,7 +29,9 @@ public class PlayerAttack : MonoBehaviour {
       if (Input.GetButtonDown("Slash")) {
         Slash();
       } else if (Input.GetButtonDown("Shoot")) {
-        Shoot();
+        ShootEnergyBall();
+      } else if (Input.GetButtonDown("ShootFreeze")) {
+        ShootFreezeBall();
       }
     }
   }
@@ -46,8 +49,18 @@ public class PlayerAttack : MonoBehaviour {
     InstantiateAttack(_slashObject, _slashPosition.position);
   }
 
-  private void Shoot() {
+  private void ShootEnergyBall() {
     animator.SetTrigger("Shoot");
-    InstantiateAttack(_shootObject, _shootPosition.position);
+    InstantiateAttack(_energyBallObject, _shootPosition.position);
+  }
+
+  private void ShootFreezeBall() {
+    animator.SetTrigger("FreezeBall");
+    GameObject freezeBallGameObject = InstantiateAttack(_freezeBallObject, _shootPosition.position);
+    if (_freezeBalls.Count >= _freezeBallMax) {
+      _freezeBalls[0].Destroy();
+      _freezeBalls.RemoveAt(0);
+    }
+    _freezeBalls.Add(freezeBallGameObject.GetComponent<FreezeBall>());
   }
 }

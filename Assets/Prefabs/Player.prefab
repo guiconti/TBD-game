@@ -356,7 +356,8 @@ MonoBehaviour:
   _slashPosition: {fileID: 70643078356370865}
   _slashObject: {fileID: 2830161751321869645, guid: 3cf385ba05468446993efa04456b5260, type: 3}
   _shootPosition: {fileID: 35167324}
-  _shootObject: {fileID: 2826203343045336327, guid: 4d559c699e9934c7089731efad72e118, type: 3}
+  _energyBallObject: {fileID: 2826203343045336327, guid: 4d559c699e9934c7089731efad72e118, type: 3}
+  _freezeBallObject: {fileID: 138335509065415785, guid: 112694410004b43fbb23136d438d63d9, type: 3}
 --- !u!1 &2989464377808660475
 GameObject:
   m_ObjectHideFlags: 0
